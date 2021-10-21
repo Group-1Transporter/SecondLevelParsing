@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
     private String tempIdStrore = "";
     private byte itterator = 0;
     private ArrayList<String> idsForQuary = new ArrayList<>();
-    private int arrayListSize =0;
     private int delayInMili = 10;
     private int position = 0;
+    private static int counter = 0;
     private ArrayList<String>firstLevelFlages  =new ArrayList<>();
     DatabaseTableDao databaseTableDao ;
     // DatabaseTableDao databaseTableDao;
@@ -104,17 +104,17 @@ public class MainActivity extends AppCompatActivity {
             String responceName="";
             String secondLevelFlages="";
 
-            for(int i=0;i<splitedResponce.length;i++){
-                String[] valueSpliter = splitedResponce[i].split(",",3);
+            for(int i=0;i<splitedResponce.length;i++) {
+                String[] valueSpliter = splitedResponce[i].split(",", 3);
                 id = Integer.valueOf(valueSpliter[0]);
                 responceName = valueSpliter[1];
                 secondLevelFlages = valueSpliter[2];
+                DatabaseTable databaseTables = new DatabaseTable(id,responceName,firstLevelFlages.get(counter),secondLevelFlages);
+                MyDataBase.getInstance(this).getDatabaseTableDao().dataInsert(databaseTables);
+                Log.d(TAG, "secondLevelParsing: "+databaseTables);
+                counter++;
             }
 
-//            DatabaseTable databaseTables = new DatabaseTable(id,responceName,firstLevelFlages.get(position),secondLevelFlages);
-//            MyDataBase.getInstance(this);
-//            databaseTableDao.dataInsert(databaseTables);
-//            Log.d(TAG, "secondLevelParsing: "+quaryResponce);
         }
 
     }

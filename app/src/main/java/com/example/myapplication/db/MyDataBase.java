@@ -8,6 +8,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.myapplication.db.dao.DatabaseTableDao;
+
 @Database(
         entities = {
                DatabaseTable.class,
@@ -22,7 +24,7 @@ public abstract class MyDataBase extends RoomDatabase {
     public static MyDataBase getInstance(Context context){
         if (myDataBase == null){
             myDataBase = Room.databaseBuilder(context.getApplicationContext(),
-                    MyDataBase.class, "sample_Parsing.db")
+                    MyDataBase.class, "sample_Parsing.db").addCallback(onCreateCallback)
                     .allowMainThreadQueries().build();
         }
         return myDataBase;
@@ -34,5 +36,6 @@ public abstract class MyDataBase extends RoomDatabase {
 
         }
     };
+    public abstract DatabaseTableDao getDatabaseTableDao();
 
 }
