@@ -10,6 +10,9 @@ import android.util.Log;
 
 import com.example.myapplication.callBack.QuaryResponce;
 import com.example.myapplication.databinding.ActivityMainBinding;
+import com.example.myapplication.db.DatabaseTable;
+import com.example.myapplication.db.MyDataBase;
+import com.example.myapplication.db.dao.DatabaseTableDao;
 
 import org.apache.commons.io.IOUtils;
 
@@ -21,10 +24,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main";
     private String tempIdStrore = "";
     private byte itterator = 0;
-    ArrayList<String> idsForQuary = new ArrayList<>();
+    private ArrayList<String> idsForQuary = new ArrayList<>();
     private int arrayListSize =0;
     private int delayInMili = 10;
     private int position = 0;
+    private ArrayList<String>firstLevelFlages  =new ArrayList<>();
+    DatabaseTableDao databaseTableDao ;
     // DatabaseTableDao databaseTableDao;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -61,7 +66,10 @@ public class MainActivity extends AppCompatActivity {
             //1,MainMenu,1,0,0,0,0,,,0,0;9,System Status,1,0,0,0,0,,0,0;15,Load,1,0,0,0,0,,0,0;25,Bus Voltage,1,0,0,0,0,,0,0;
             //First split responce with ; semicolom then split with , comma
             // String tempResponse = response;
-            String tempResponce = "1,MainMenu,1,0,0,0,0,,,0,0;9,System Status,1,0,0,0,0,,0,0;15,Load,1,0,0,0,0,,0,0;25,Bus Voltage,1,0,0,0,0,,0,0;";
+
+
+
+           /* String tempResponce = "1,MainMenu,1,0,0,0,0,,,0,0;9,System Status,1,0,0,0,0,,0,0;15,Load,1,0,0,0,0,,0,0;25,Bus Voltage,1,0,0,0,0,,0,0;";
             String[] splitedResponce = tempResponce.split(";");
             Integer id;
             String responceName;
@@ -72,12 +80,13 @@ public class MainActivity extends AppCompatActivity {
                 id = Integer.valueOf(valueSpliter[0]);
                 responceName = valueSpliter[1];
                 secondLevelFlages = valueSpliter[2];
-            }
+            }*/
 
         }
 
         @Override
         public void onFail(Throwable throwable) {
+            Log.d(TAG, "onFail: ");
 
         }
     };
@@ -87,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             String request = "";
             request = "type=3&itms=";
             request+=idsForQuary.get(position);
-            // sendRequest(request,quaryResponce);
+          //  sendRequest(request,quaryResponce);
 
             String tempResponce = "1,MainMenu,1,0,0,0,0,,,0,0;9,System Status,1,0,0,0,0,,0,0;15,Load,1,0,0,0,0,,0,0;25,Bus Voltage,1,0,0,0,0,,0,0;";
             String[] splitedResponce = tempResponce.split(";");
@@ -102,11 +111,10 @@ public class MainActivity extends AppCompatActivity {
                 secondLevelFlages = valueSpliter[2];
             }
 
-          /*  DatabaseTable databaseTables = new DatabaseTable(id,responceName,"",secondLevelFlages);
-            MyDataBase.getInstance(this);
-            databaseTableDao.dataInsert(databaseTables);
-           */
-            Log.d(TAG, "secondLevelParsing: "+quaryResponce);
+//            DatabaseTable databaseTables = new DatabaseTable(id,responceName,firstLevelFlages.get(position),secondLevelFlages);
+//            MyDataBase.getInstance(this);
+//            databaseTableDao.dataInsert(databaseTables);
+//            Log.d(TAG, "secondLevelParsing: "+quaryResponce);
         }
 
     }
@@ -147,11 +155,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                     firstLevel[j] = convert;
                 }
+                firstLevelFlages.add(String.valueOf(firstLevel));
 
                 int msb = Byte.toUnsignedInt(itemData[i + 1]);
                 int lsb = Byte.toUnsignedInt(itemData[i + 2]);
                 int result;
                 result = lsb + (msb << 8);
+
                 if(itterator<14){
                     tempIdStrore += result;
                     if (itterator<13){
@@ -181,5 +191,6 @@ public class MainActivity extends AppCompatActivity {
         //insert last 15 ids
         idsForQuary.add(tempIdStrore);
         Log.d(TAG, ""+idsForQuary.size());
+        Log.d(TAG, ""+firstLevelFlages);
     }
 }
