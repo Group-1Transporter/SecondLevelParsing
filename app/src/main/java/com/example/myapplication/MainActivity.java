@@ -80,7 +80,18 @@ public class MainActivity extends AppCompatActivity {
                 id = Integer.valueOf(valueSpliter[0]);
                 responceName = valueSpliter[1];
                 secondLevelFlages = valueSpliter[2];
+
+                //database data insertion code
+                ...
+                ...
+                ...
+                //then we call second level parsing method;
+                //And counter++ is here
+
             }*/
+
+
+            new Handler().postDelayed(()->runOnUiThread(()->secondLevelParsing()),delayInMili);
 
         }
 
